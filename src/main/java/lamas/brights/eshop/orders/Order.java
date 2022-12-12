@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
-public class Orders {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +22,10 @@ public class Orders {
     private User user;
 
 
-    public Orders() {
+    public Order() {
     }
 
-    public Orders(long id, LocalDateTime orderDate, User user) {
+    public Order(long id, LocalDateTime orderDate, User user) {
         this.id = id;
         this.orderDate = orderDate;
         this.user = user;
