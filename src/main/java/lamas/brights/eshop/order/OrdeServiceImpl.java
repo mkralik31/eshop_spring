@@ -1,4 +1,4 @@
-package lamas.brights.eshop.orders;
+package lamas.brights.eshop.order;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ public class OrdeServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllOrders() {
-        return orderRepository.findAll();;
+        return orderRepository.findAll();
     }
 
     @Override

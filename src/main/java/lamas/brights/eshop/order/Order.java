@@ -1,4 +1,4 @@
-package lamas.brights.eshop.orders;
+package lamas.brights.eshop.order;
 
 import com.sun.istack.NotNull;
 
