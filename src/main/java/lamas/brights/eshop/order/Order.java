@@ -1,9 +1,12 @@
 package lamas.brights.eshop.order;
 
 import com.sun.istack.NotNull;
+import lamas.brights.eshop.product.Product;
+import lamas.brights.eshop.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -21,14 +24,22 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "order_product",
+            joinColumns = {@JoinColumn(name = "order_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id")}
+    )
+    private List<Product> product;
+
 
     public Order() {
     }
 
-    public Order(long id, LocalDateTime orderDate, User user) {
+    public Order(long id, LocalDateTime orderDate, User user, List<Product> product) {
         this.id = id;
         this.orderDate = orderDate;
         this.user = user;
+        this.product = product;
     }
 
     public long getId() {
@@ -55,12 +66,21 @@ public class Order {
         this.user = user;
     }
 
+    public List<Product> getProduct() {
+        return product;
+    }
+
+    public void setProduct(List<Product> product) {
+        this.product = product;
+    }
+
     @Override
     public String toString() {
-        return "Orders{" +
+        return "Order{" +
                 "id=" + id +
                 ", orderDate=" + orderDate +
                 ", user=" + user +
+                ", product=" + product +
                 '}';
     }
 }
