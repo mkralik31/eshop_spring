@@ -25,8 +25,8 @@ public class CategoryController {
     }
 
 
-    @GetMapping("/api/products/category")
-    public ResponseEntity<List<Locale.Category>> getAllCategories(@RequestParam(required = false) String name) {
+    @GetMapping("/products/category")
+    public ResponseEntity<List<Category>> getAllCategories(@RequestParam(required = false) String name) {
         try {
             List<Category> category = new ArrayList<>();
 
@@ -40,7 +40,8 @@ public class CategoryController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(category, HttpStatus.OK);
+
 
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
