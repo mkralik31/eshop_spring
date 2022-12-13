@@ -34,7 +34,7 @@ public class CustomUserServiceImpl implements CustomUserService {
     public void register(User user) {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         userRepository.save(new User (user.getFirstName(), user.getLastName(), user.getStreetName(), user.getStreetNo(),
-                user.getCity(), user.getPostalCode(), user.getEmail(), user.getPhoneNo(), user.getUsername(), encodedPassword));
+                user.getCity(), user.getPostalCode(), user.getPhoneNo(), user.getEmail(), user.getUsername(), encodedPassword));
     }
 
 

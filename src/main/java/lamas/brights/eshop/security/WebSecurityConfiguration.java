@@ -17,19 +17,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     private static final String[] WHITELIST = {
-            "/",
-            "/register"
+            "/**"
     };
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers(WHITELIST).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .and()
-                .httpBasic();
+                .antMatchers(WHITELIST)
+                .permitAll();
     }
 }
