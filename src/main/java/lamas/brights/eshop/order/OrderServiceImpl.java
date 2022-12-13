@@ -8,10 +8,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class OrdeServiceImpl implements OrderService {
+public class OrderServiceImpl implements OrderService {
+    private final OrderRepository orderRepository;
 
-    @Autowired
-    private OrderRepository orderRepository;
+    public OrderServiceImpl(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
 
     @Override
     public List<Order> getAllOrders() {
@@ -19,13 +22,13 @@ public class OrdeServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrdersById(long id) {
+    public Order getOrderById(long id) {
         Optional<Order> optional = orderRepository.findById(id);
-        Order order = null;
+        Order order =null;
 
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             order = optional.get();
-        }else{
+        } else {
             throw new RuntimeException("Orders not found for id: " + id);
         }
 

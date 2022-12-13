@@ -6,5 +6,6 @@ public interface OrderService {
 
     List<Order> getAllOrders();
 
-    Order getOrdersById(long id);
+
+    Order getOrderById(long id);
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 @RestController
@@ -22,7 +23,7 @@ public class CategoryController {
     }
 
 
-    @GetMapping("/products/category")
+    @GetMapping("/product/category")
     public ResponseEntity<List<Category>> getAllCategories(@RequestParam(required = false) String name) {
         try {
             List<Category> category = new ArrayList<>();
@@ -46,7 +47,7 @@ public class CategoryController {
     }
 
 
-    @GetMapping("/products/category/{id}")
+    @GetMapping("/product/category/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable("id") long id) {
         // method to return category by id from database
         Category category = categoryService.getCategoryById(id);

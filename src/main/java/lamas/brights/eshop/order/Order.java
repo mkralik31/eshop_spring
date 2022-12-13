@@ -1,6 +1,7 @@
 package lamas.brights.eshop.order;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lamas.brights.eshop.product.Product;
 import lamas.brights.eshop.user.User;
 
@@ -25,6 +26,7 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @ManyToMany(fetch = FetchType.EAGER)
