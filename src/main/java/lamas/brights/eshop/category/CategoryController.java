@@ -20,7 +20,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @Autowired
-    public CategoryController(CategoryController categoryController){
+    public CategoryController(CategoryService categoryService){
         this.categoryService = categoryService;
     }
 
