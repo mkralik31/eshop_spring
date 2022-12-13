@@ -1,9 +1,11 @@
 package lamas.brights.eshop.product;
 
+import com.sun.istack.NotNull;
 import lamas.brights.eshop.category.Category;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
+
 
 @Entity
 @Table(name = "products")
@@ -13,7 +15,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull(message = "Name should not be empty") // validation maybe not necessary - products will be fixed directly in database at start
+    @NotEmpty(message = "Name should not be empty") // validation maybe not necessary - products will be fixed directly in database at start
     @NotNull
     @Column(name = "name")
     private String name;

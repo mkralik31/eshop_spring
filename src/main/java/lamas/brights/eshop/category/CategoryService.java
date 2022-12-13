@@ -8,4 +8,6 @@ public interface CategoryService {
 
     Category getCategoryById(long id);
 
+
+    List<Category> getCategoryByName(String name);
 }
