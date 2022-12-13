@@ -19,6 +19,11 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public List<Product> getProductByName(String name) {
+        return productRepository.findByNameContaining(name);
+    }
+
+    @Override
     public Product getProductById(long id) {
         Optional<Product> optional = productRepository.findById(id);
         Product product = null;
@@ -30,5 +35,22 @@ public class ProductServiceImpl implements ProductService{
         }
 
         return product;
+    }
+
+    @Override
+    public Product saveProduct(Product product) {
+        Product _product = productRepository.save(product);
+
+        return _product;
+    }
+
+    @Override
+    public void deleteProductById(long id) {
+        this.productRepository.deleteProductById(id);
+    }
+
+    @Override
+    public void deleteAllProducts() {
+        productRepository.deleteAll();
     }
 }

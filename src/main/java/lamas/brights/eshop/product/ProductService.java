@@ -4,5 +4,12 @@ import java.util.List;
 
 public interface ProductService {
     List<Product> getAllProducts();
+    List<Product> getProductByName(String name);
     Product getProductById(long id);
+
+    Product saveProduct(Product product);
+
+    void deleteProductById(long id);
+
+    void deleteAllProducts();
 }
