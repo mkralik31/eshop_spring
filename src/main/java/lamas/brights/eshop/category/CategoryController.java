@@ -25,7 +25,7 @@ public class CategoryController {
     }
 
 
-    @GetMapping("/products/category")
+    @GetMapping("/api/products/category")
     public ResponseEntity<List<Locale.Category>> getAllCategories(@RequestParam(required = false) String name) {
         try {
             List<Category> category = new ArrayList<>();
