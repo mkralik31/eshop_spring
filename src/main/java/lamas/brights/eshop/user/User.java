@@ -24,7 +24,7 @@ public class User implements UserDetails {
     @Column(name = "streetname")
     private String streetName;
 
-    @Column(name = "streenumber")
+    @Column(name = "streetnumber")
     private String streetNo;
 
     @Column(name = "city")
@@ -69,16 +69,12 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String email) {
-        this.username = email;
     }
 
     @Override
