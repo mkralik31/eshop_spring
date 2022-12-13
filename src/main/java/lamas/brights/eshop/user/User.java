@@ -44,17 +44,10 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    public User(String firstName, String lastName, String streetName, String streetNo, String city,
-                String postalCode, String email, String phoneNo, String username, String password) {
+    public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.streetName = streetName;
-        this.streetNo = streetNo;
-        this.city = city;
-        this.postalCode = postalCode;
         this.email = email;
-        this.phoneNo = phoneNo;
-        this.username = username;
         this.password = password;
     }
 
@@ -74,7 +67,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return null;
     }
 
     @Override
@@ -101,8 +94,16 @@ public class User implements UserDetails {
         return userId;
     }
 
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     public String getFirstName() {
         return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -145,6 +146,14 @@ public class User implements UserDetails {
         this.postalCode = postalCode;
     }
 
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -153,12 +162,8 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public String getPhoneNo() {
-        return phoneNo;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setPassword(String password) {
