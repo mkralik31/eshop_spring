@@ -1,5 +1,8 @@
 package lamas.brights.eshop.user;
 
+import lamas.brights.eshop.user.authorization.Login;
+
+import lamas.brights.eshop.user.authorization.RegistrationDTO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface CustomUserService extends UserDetailsService {
@@ -8,5 +11,6 @@ public interface CustomUserService extends UserDetailsService {
 
     boolean emailExists(String email);
 
-    User login(String email, String password);
+    Login login(String email, String password);
+
 }

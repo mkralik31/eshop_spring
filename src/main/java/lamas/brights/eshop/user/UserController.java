@@ -1,10 +1,15 @@
 package lamas.brights.eshop.user;
 
+import lamas.brights.eshop.user.authorization.Login;
+import lamas.brights.eshop.user.authorization.Token;
+import lamas.brights.eshop.user.authorization.LoginDTO;
+import lamas.brights.eshop.user.authorization.RegistrationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
 
@@ -40,11 +45,11 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<LoginDTO> loginUser(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<String> loginUser(@RequestBody LoginDTO loginDTO) {
 
-        User user = customUserService.login(loginDTO.email(), loginDTO.password());
-        if(user != null) {
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        Login login = customUserService.login(loginDTO.email(), loginDTO.password());
+        if(login != null) {
+            return new ResponseEntity<>(login.getAccessToken().getToken(), HttpStatus.ACCEPTED);
         }
         //email or password is wrong
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
