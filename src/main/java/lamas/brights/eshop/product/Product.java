@@ -5,6 +5,9 @@ import lamas.brights.eshop.category.Category;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.util.Arrays;
 
 
 @Entity
@@ -40,15 +43,20 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+
+    @Column(name = "image_path")
+    private String imagePath ;
+
     public Product() {
     }
 
-    public Product(String name, double price, int count, String description, Category category) {
+    public Product(String name, double price, int count, String description, Category category, String imagePath) {
         this.name = name;
         this.price = price;
         this.count = count;
         this.description = description;
         this.category = category;
+        this.imagePath = imagePath;
     }
 
     public long getId() {
@@ -99,8 +107,24 @@ public class Product {
         this.category = category;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     @Override
     public String toString() {
-        return "Product{" + "id=" + id + ", name='" + name + '\'' + ", price=" + price + ", count=" + count + ", description='" + description + '\'' + ", category=" + category + '}';
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", count=" + count +
+                ", description='" + description + '\'' +
+                ", category=" + category +
+                ", imagePath='" + imagePath + '\'' +
+                '}';
     }
 }
