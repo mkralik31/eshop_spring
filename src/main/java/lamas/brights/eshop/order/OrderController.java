@@ -11,7 +11,7 @@ import lamas.brights.eshop.user.User;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/order")
 public class OrderController {
 
     private final OrderService orderService;
@@ -25,7 +25,7 @@ public class OrderController {
     }
 
     //get all orders for user
-    @GetMapping("/order")
+    @GetMapping("/")
     public ResponseEntity<List<Order>> getAllOrders(@RequestParam("token") String token) throws Exception {
         // validate token (if TOKEN and USER is present)
         if (token != null) {
@@ -42,7 +42,7 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PostMapping("/order/add")
+    @PostMapping("/add")
     public ResponseEntity<Order> createOrder(@RequestParam("token") String token,
                                             @RequestBody Order order) throws Exception {
         // validate token (if TOKEN, ORDER and USER is present)
