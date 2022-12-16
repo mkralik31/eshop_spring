@@ -1,15 +1,14 @@
 package lamas.brights.eshop.user;
 
-import lamas.brights.eshop.user.authorization.Login;
-import lamas.brights.eshop.user.authorization.Token;
-import lamas.brights.eshop.user.authorization.LoginDTO;
-import lamas.brights.eshop.user.authorization.RegistrationDTO;
+import lamas.brights.eshop.authorization.AuthenticationService;
+import lamas.brights.eshop.dto.LoginDto;
+import lamas.brights.eshop.dto.LoginResponseDto;
+import lamas.brights.eshop.dto.RegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
 
@@ -18,15 +17,17 @@ import java.util.Objects;
 public class UserController {
 
     private final CustomUserService customUserService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public UserController(CustomUserService customUserService) {
+    public UserController(CustomUserService customUserService, AuthenticationService authenticationService) {
         this.customUserService = customUserService;
+        this.authenticationService = authenticationService;
     }
 
 
     @PostMapping("/register")
-    public ResponseEntity<RegistrationDTO> registerUser(@RequestBody RegistrationDTO registrationDTO) {
+    public ResponseEntity<RegistrationDto> registerUser(@RequestBody RegistrationDto registrationDTO) {
 
         // return conflict status because email is already in use
         if (customUserService.emailExists(registrationDTO.email())) {
@@ -38,18 +39,24 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        // create user and return status 201 CREATED
-        customUserService.register(registrationDTO);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        try {
+            // create user and return status 201 CREATED
+            customUserService.register(registrationDTO);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginDto loginDTO) {
 
-        Login login = customUserService.login(loginDTO.email(), loginDTO.password());
-        if(login != null) {
-            return new ResponseEntity<>(login.getAccessToken().getToken(), HttpStatus.ACCEPTED);
+        LoginResponseDto  loginResponseDto = customUserService.login(loginDTO.email(), loginDTO.password());
+
+        if(loginResponseDto != null) {
+            return new ResponseEntity<>(loginResponseDto, HttpStatus.ACCEPTED);
         }
         //email or password is wrong
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

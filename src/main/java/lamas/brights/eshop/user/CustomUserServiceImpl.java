@@ -1,11 +1,10 @@
 package lamas.brights.eshop.user;
 
-import lamas.brights.eshop.user.authorization.Login;
-import lamas.brights.eshop.user.authorization.RegistrationDTO;
+import lamas.brights.eshop.authorization.AuthenticationService;
+import lamas.brights.eshop.authorization.AuthenticationToken;
+import lamas.brights.eshop.dto.LoginResponseDto;
+import lamas.brights.eshop.dto.RegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,32 +14,31 @@ import java.util.Optional;
 public class CustomUserServiceImpl implements CustomUserService {
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-    private final String accessTokenSecret;
+    private final AuthenticationService authenticationService;
 
     @Autowired
     public CustomUserServiceImpl(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            @Value("${application.security.access-token-secret}")String accessTokenSecret) {
+            AuthenticationService authenticationService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.accessTokenSecret = accessTokenSecret;
+        this.authenticationService = authenticationService;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
-    }
-
-    public void register(RegistrationDTO registrationDTO) {
+    public void register(RegistrationDto registrationDTO) {
         String encodedPassword = passwordEncoder.encode(registrationDTO.password());
-        userRepository.save(new User (
-                registrationDTO.firstName(),
-                registrationDTO.lastName(),
-                registrationDTO.email(),
-                encodedPassword));
+        User newUser = null;
+            newUser = userRepository.save(new User(
+                    registrationDTO.firstName(),
+                    registrationDTO.lastName(),
+                    registrationDTO.email(),
+                    encodedPassword));
+
+            AuthenticationToken authenticationToken = new AuthenticationToken(newUser);
+            authenticationService.saveConfirmationToken(authenticationToken);
+
     }
 
     @Override
@@ -50,7 +48,7 @@ public class CustomUserServiceImpl implements CustomUserService {
     }
 
     @Override
-    public Login login(String email, String password) {
+    public LoginResponseDto login(String email, String password) {
         // find user by email
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (!optionalUser.isPresent()) {
@@ -58,11 +56,14 @@ public class CustomUserServiceImpl implements CustomUserService {
         }
         User user = optionalUser.get();
         // check if input password is matching password that is stored in DB
-        if(!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             return null;
         }
         //return token if the email and password are correct
-        return Login.of(user.getUserId(),  accessTokenSecret);
+
+        AuthenticationToken authenticationToken = authenticationService.getToken(user);
+        System.err.println(authenticationToken.getToken());
+        return new LoginResponseDto("success", authenticationToken.getToken());
     }
 
 }
