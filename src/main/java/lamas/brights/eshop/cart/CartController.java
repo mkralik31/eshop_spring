@@ -1,6 +1,7 @@
 package lamas.brights.eshop.cart;
 
 import lamas.brights.eshop.authorization.AuthenticationService;
+import lamas.brights.eshop.dto.CartDto;
 import lamas.brights.eshop.product.Product;
 import lamas.brights.eshop.product.ProductService;
 import lamas.brights.eshop.dto.AddToCartDto;
@@ -11,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/api")
 public class CartController {
 
     private final CartService cartService;
@@ -27,7 +28,7 @@ public class CartController {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/cart/add")
     public ResponseEntity<Cart> addToCart(@RequestParam("token") String token,
                                           @RequestBody AddToCartDto addToCartDto) throws Exception {
         // validate token (if TOKEN and USER is present)
@@ -49,6 +50,21 @@ public class CartController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @GetMapping("/cart")
+    public ResponseEntity<CartDto> listCartItems(@RequestParam("token") String token) throws Exception {
+        // validate token (if TOKEN and USER is present)
+        if (token != null) {
+            authenticationService.authenticate(token);
+            // retrieve user after validation
+            User user = authenticationService.getUser(token);
+            //retrieve products for user
+            CartDto cartDto = cartService.listCartItems(user);
+
+            return new ResponseEntity<>(cartDto, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
