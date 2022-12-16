@@ -1,41 +1,45 @@
 package lamas.brights.eshop.order;
 
 
+import lamas.brights.eshop.authorization.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import lamas.brights.eshop.user.User;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class OrderController {
 
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public OrderController (OrderService orderService){
+    public OrderController(OrderService orderService,
+                           AuthenticationService authenticationService) {
         this.orderService = orderService;
+        this.authenticationService = authenticationService;
     }
 
-    @GetMapping("/user/order/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable("id") long id) {
-        // method to return order by id from database
-        Order order = orderService.getOrderById(id);
+    //get all orders for user
+    @GetMapping("/")
+    public ResponseEntity<List<Order>> getAllOrders(@RequestParam("token") String token) throws Exception {
+        // validate token (if TOKEN and USER is present)
+        if (token != null) {
+            authenticationService.authenticate(token);
 
-        if (order != null) {
-            return new ResponseEntity<>(order, HttpStatus.OK);
+            // retrieve user after validation
+            User user = authenticationService.getUser(token);
+
+            // get orders for authenticated user
+            List<Order> orderDtoList = orderService.listOrders(user);
+
+            return new ResponseEntity<>(orderDtoList, HttpStatus.OK);
         }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-
-/*    @GetMapping("user/order")
-    public ResponseEntity<Order> getOrderByUserId
-*/
 
 }
