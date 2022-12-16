@@ -39,8 +39,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         //throw exception only if TOKEN is not valid
         Optional<AuthenticationToken> _authenticationToken = tokenRepository.findTokenByToken(token);
-        System.err.println(token);
-        System.err.println(getUser(token).getEmail());
+
+        System.err.println(
+                "\n" + "AuthenticationServiceImpl.authenticate" + "\n" +
+                token + "\n" +
+                getUser(token).getEmail() + "\n" );
         AuthenticationToken authenticationToken = null;
         // if TOKEN exists continue
         if (!_authenticationToken.isPresent()) {
