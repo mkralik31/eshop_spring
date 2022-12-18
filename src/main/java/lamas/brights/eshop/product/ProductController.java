@@ -1,5 +1,6 @@
 package lamas.brights.eshop.product;
 
+import lamas.brights.eshop.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,9 @@ import java.util.List;
 public class ProductController {
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping("/products")
 //    public ResponseEntity<List<Product>> getAllProducts(@RequestParam(required = false) String name) {
@@ -42,6 +46,26 @@ public class ProductController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 return new ResponseEntity<>(product, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/categories/{categoryId}/products")
+    public ResponseEntity<List<Product>> getProductByCategoryId(@PathVariable(value = "categoryId") long categoryId) {
+        try {
+            if (!categoryService.existsCategoryById(categoryId)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+
+                List<Product> products = productService.getProductsByCategoryId(categoryId);
+
+                if (products.isEmpty()) {
+                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                } else {
+                    return new ResponseEntity<>(products, HttpStatus.OK);
+                }
             }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
