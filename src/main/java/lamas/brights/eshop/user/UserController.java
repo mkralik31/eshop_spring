@@ -26,7 +26,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/register")
+    @PostMapping("/user/register")
     public ResponseEntity<RegistrationDto> registerUser(@RequestBody RegistrationDto registrationDTO) {
 
         // return conflict status because email is already in use
@@ -50,7 +50,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginDto loginDTO) {
 
         LoginResponseDto  loginResponseDto = customUserService.login(loginDTO.email(), loginDTO.password());

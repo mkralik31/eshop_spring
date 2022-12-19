@@ -67,4 +67,17 @@ public class CartController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @DeleteMapping("/cart/delete/{cartItemId}")
+    public ResponseEntity<String> deleteItemFromCart(@PathVariable("cartItemId") Long cartItemId,
+                                                      @RequestParam("token") String token ) throws Exception {
+        // validate token (if TOKEN and USER is present)
+        if (token != null) {
+            authenticationService.authenticate(token);
+              //delete item from user's cart by id
+            cartService.deleteCartItem(cartItemId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
 }

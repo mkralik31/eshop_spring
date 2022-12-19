@@ -5,6 +5,7 @@ import lamas.brights.eshop.dto.CartDto;
 import lamas.brights.eshop.dto.CartItemDto;
 import lamas.brights.eshop.product.Product;
 import lamas.brights.eshop.user.User;
+import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,13 +44,19 @@ public class CartServiceImpl implements CartService{
         }
 
         //set initial price in cart to 0
-        double totalPrice = 0;
+        double _totalPrice = 0;
         // for every item from carts retrieve price and calculate value according to quantity
         for(CartItemDto cartItemDto : cartItemsList) {
-            totalPrice += (cartItemDto.getProduct().getPrice() * cartItemDto.getQuantity());
+            _totalPrice += (cartItemDto.getProduct().getPrice() * cartItemDto.getQuantity());
         }
+        double totalPrice = Precision.round(_totalPrice, 2);
         //return list of items and total price
         return new CartDto(cartItemsList, totalPrice);
+    }
+
+    @Override
+    public void deleteCartItem(Long cartItemId) {
+        cartRepository.deleteById(cartItemId);
     }
 
     //helper method for retrieving items from carts
