@@ -36,4 +36,8 @@ public class CategoryServiceImpl implements CategoryService{
         return categoryRepository.findByNameContaining(name);
     }
 
+    @Override
+    public boolean existsCategoryById(long categoryId) {
+        return categoryRepository.existsById(categoryId);
+    }
 }
