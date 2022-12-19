@@ -42,16 +42,16 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PostMapping("order/add")
-    public ResponseEntity<Order> createOrder(@RequestParam("token") String token,
-                                            @RequestBody Order order) throws Exception {
+    @PostMapping("/order/add")
+    public ResponseEntity<String> createOrder(@RequestParam("token") String token,
+                                              @RequestBody Order order) throws Exception {
         // validate token (if TOKEN, ORDER and USER is present)
         if (token != null && order != null) {
             authenticationService.authenticate(token);
-
+            User user = authenticationService.getUser(token);
             // place the order
-            Order orderResponse = orderService.createOrder(order);
-            return new ResponseEntity<>(orderResponse, HttpStatus.CREATED);
+            orderService.createOrder(user, order);
+            return new ResponseEntity<>("Success", HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

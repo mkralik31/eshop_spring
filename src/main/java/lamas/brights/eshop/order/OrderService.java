@@ -8,5 +8,5 @@ public interface OrderService {
 
     List<Order> listOrders(User user);
 
-    Order createOrder(Order order);
+    void createOrder(User user, Order order);
 }
