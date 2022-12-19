@@ -2,6 +2,7 @@ package lamas.brights.eshop.user.address;
 
 import lamas.brights.eshop.authorization.AuthenticationService;
 import lamas.brights.eshop.user.User;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,15 +23,15 @@ public class AddressController {
         this.authenticationService = authenticationService;
     }
     @GetMapping("/user/address")
-    public ResponseEntity<Address> getAddressForUser(@RequestParam("token") String token) throws Exception {
+    public ResponseEntity<List<Address>> getAddressForUser(@RequestParam("token") String token) throws Exception {
         if (token != null) {
             authenticationService.authenticate(token);
             User user = authenticationService.getUser(token);
-            Address address = addressService.getAddressForUser(user);
-            if (address == null) {
+            List<Address> addresses = addressService.getAddressForUser(user);
+            if (addresses == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(address, HttpStatus.OK);
+            return new ResponseEntity<>(addresses, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
