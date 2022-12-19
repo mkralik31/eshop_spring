@@ -59,6 +59,11 @@ public class CartServiceImpl implements CartService{
         cartRepository.deleteById(cartItemId);
     }
 
+    @Override
+    public void deleteUserCartItems(User user) {
+        cartRepository.deleteByUser(user);
+    }
+
     //helper method for retrieving items from carts
     public CartItemDto getDtoFromCart(Cart cart) {
         return new CartItemDto(cart);
