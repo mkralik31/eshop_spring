@@ -37,6 +37,7 @@ public class Product {
     private int count; // count of product in stock
 
     @Column(name = "description")
+    @Lob
     private String description;
 
     @ManyToOne(optional = false)
