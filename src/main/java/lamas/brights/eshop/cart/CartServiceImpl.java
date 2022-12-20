@@ -8,6 +8,7 @@ import lamas.brights.eshop.user.User;
 import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +31,7 @@ public class CartServiceImpl implements CartService{
         cartRepository.save(cart);
     }
 
+    @Transactional
     @Override
     public CartDto listCartItems(User user) {
         //find all carts for user
@@ -61,7 +63,7 @@ public class CartServiceImpl implements CartService{
 
     @Override
     public void deleteUserCartItems(User user) {
-        cartRepository.deleteByUser(user);
+        cartRepository.deleteAllByUser(user);
     }
 
     //helper method for retrieving items from carts

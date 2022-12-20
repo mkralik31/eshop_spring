@@ -36,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void createOrder(User user, Order order) {
 
+        System.err.println(order.getTotalPrice());
         // get items from user's cart
         CartDto cartDto = cartService.listCartItems(user);
 
