@@ -4,6 +4,7 @@ import lamas.brights.eshop.authorization.AuthenticationService;
 import lamas.brights.eshop.dto.LoginDto;
 import lamas.brights.eshop.dto.LoginResponseDto;
 import lamas.brights.eshop.dto.RegistrationDto;
+import lamas.brights.eshop.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,5 +62,23 @@ public class UserController {
         //email or password is wrong
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("/user")
+    public ResponseEntity<UserDto> getUserDetails(@RequestParam("token") String token) throws Exception {
+
+        if (token != null) {
+            authenticationService.authenticate(token);
+
+            // retrieve user after validation
+            User user = authenticationService.getUser(token);
+
+            UserDto userDto = customUserService.getUserDetails(user);
+
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 
 }
