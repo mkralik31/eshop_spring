@@ -2,6 +2,8 @@ package lamas.brights.eshop.order;
 
 
 import lamas.brights.eshop.authorization.AuthenticationService;
+import lamas.brights.eshop.dto.OrderDto;
+import lamas.brights.eshop.dto.OrderItemDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +30,7 @@ public class OrderController {
 
     //get all orders for user
     @GetMapping("/order")
-    public ResponseEntity<List<Order>> getAllOrders(@RequestParam("token") String token) throws Exception {
+    public ResponseEntity<List<OrderDto>> getAllOrders(@RequestParam("token") String token) throws Exception {
         // validate token (if TOKEN and USER is present)
         if (token != null) {
             authenticationService.authenticate(token);
@@ -37,7 +39,7 @@ public class OrderController {
             User user = authenticationService.getUser(token);
 
             // get orders for authenticated user
-            List<Order> orderDtoList = orderService.listOrders(user);
+            List<OrderDto> orderDtoList = orderService.listOrderDto(user);
 
             return new ResponseEntity<>(orderDtoList, HttpStatus.OK);
         }

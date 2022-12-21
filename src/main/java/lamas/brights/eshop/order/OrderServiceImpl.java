@@ -2,7 +2,9 @@ package lamas.brights.eshop.order;
 
 
 import lamas.brights.eshop.cart.CartService;
+import lamas.brights.eshop.dto.OrderDto;
 import lamas.brights.eshop.orderitem.OrderItemRepository;
+import lamas.brights.eshop.orderitem.OrderItemService;
 import lamas.brights.eshop.user.User;
 import lamas.brights.eshop.dto.CartDto;
 import lamas.brights.eshop.dto.CartItemDto;
@@ -10,6 +12,7 @@ import lamas.brights.eshop.orderitem.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,20 +21,41 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final CartService cartService;
+    private final OrderItemService orderItemService;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
                             OrderItemRepository orderItemRepository,
-                            CartService cartService) {
+                            CartService cartService,
+                            OrderItemService orderItemService) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.cartService = cartService;
+        this.orderItemService = orderItemService;
     }
 
+
     @Override
-    public List<Order> listOrders(User user) {
-        return orderRepository.findAllByUserOrderByOrderDateDesc(user);
+    public List<OrderDto> listOrderDto(User user) {
+        //list all Orders for user
+        List<Order> ordersList = orderRepository.findAllByUserOrderByOrderDateDesc(user);
+        List<OrderDto> orderDtolist = new ArrayList<>();
+
+        for(Order order : ordersList) {
+            //orderId
+            System.err.println(order);
+            OrderDto orderDto = new OrderDto(
+                    order.getOrderId(),
+                    order.getOrderDate(),
+                    order.getTotalPrice(),
+                    orderItemService.orderItems(order)
+            );
+            orderDtolist.add(orderDto);
+        }
+
+        return orderDtolist;
     }
+
 
     @Override
     public void createOrder(User user, Order order) {
@@ -50,10 +74,10 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(newOrder);
 
         System.err.println(
-                "\n" +"OrderServiceImpl.createOrder" + "\n" +
+                "\n" + "OrderServiceImpl.createOrder" + "\n" +
                         newOrder.getOrderId() + "\n" +
                         newOrder.getOrderDate() + "\n" +
-                        newOrder.getTotalPrice() + "\n" );
+                        newOrder.getTotalPrice() + "\n");
 
         for (CartItemDto cartItemDto : cartItemDtoList) {
             // create orderItem and save it for every item
@@ -67,11 +91,11 @@ public class OrderServiceImpl implements OrderService {
             orderItemRepository.save(orderItem);
 
             System.err.println(
-                    "\n" +"OrderServiceImpl create item in order" + "\n" +
+                    "\n" + "OrderServiceImpl create item in order" + "\n" +
                             "orderItemId: " + orderItem.getId() + "\n" +
                             "orderId: " + orderItem.getOrder().getOrderId() + "\n" +
                             "productName: " + orderItem.getProduct().getName() + "\n" +
-                            "productQuantity: " + orderItem.getQuantity() + "\n" );
+                            "productQuantity: " + orderItem.getQuantity() + "\n");
         }
         // when all items are saved in orderItem table, delete items from cart table
         cartService.deleteUserCartItems(user);

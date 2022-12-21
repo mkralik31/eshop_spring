@@ -39,5 +39,14 @@ public class OrderItem {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
-    public OrderItem(){}
+    public OrderItem(Long id, Integer quantity, double price, Product product) {
+        this.id = id;
+        this.quantity = quantity;
+        this.price = price;
+        this.product = product;
+    }
+
+    public OrderItem() {
+
+    }
 }
