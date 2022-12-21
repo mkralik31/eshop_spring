@@ -1,9 +1,15 @@
 package lamas.brights.eshop.dto;
 
 import lamas.brights.eshop.user.address.Address;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
+@Getter
+@Setter
+@ToString
 public class UserDto {
 
     private String firstName;
