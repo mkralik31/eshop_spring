@@ -74,13 +74,20 @@ public class CustomUserServiceImpl implements CustomUserService {
 
     @Override
     public UserDto getUserDetails(User user) {
-        UserDto userDto = new UserDto(
+
+        System.err.println(
+                "\n" + "OrderServiceImpl.createOrder" + "\n" +
+                        user.getFirstName() + "\n" +
+                        user.getLastName() + "\n" +
+                        user.getEmail() + "\n" +
+                        addressService.getAddressForUser(user) );
+
+        return new UserDto(
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
                 addressService.getAddressForUser(user)
         );
-        return userDto;
     }
 
 }
