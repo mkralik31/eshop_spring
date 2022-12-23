@@ -68,8 +68,6 @@ public class UserController {
 
         if (token != null) {
             authenticationService.authenticate(token);
-
-            // retrieve user after validation
             User user = authenticationService.getUser(token);
 
             UserDto userDto = customUserService.getUserDetails(user);
@@ -79,6 +77,5 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 
 }
