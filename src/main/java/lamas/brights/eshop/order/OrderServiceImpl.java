@@ -9,6 +9,7 @@ import lamas.brights.eshop.user.User;
 import lamas.brights.eshop.dto.CartDto;
 import lamas.brights.eshop.dto.CartItemDto;
 import lamas.brights.eshop.orderitem.OrderItem;
+import lamas.brights.eshop.user.address.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,16 +24,19 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemRepository orderItemRepository;
     private final CartService cartService;
     private final OrderItemService orderItemService;
+    private final AddressService addressService;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
                             OrderItemRepository orderItemRepository,
                             CartService cartService,
-                            OrderItemService orderItemService) {
+                            OrderItemService orderItemService,
+                            AddressService addressService) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.cartService = cartService;
         this.orderItemService = orderItemService;
+        this.addressService = addressService;
     }
 
 
@@ -49,6 +53,8 @@ public class OrderServiceImpl implements OrderService {
                     order.getOrderId(),
                     order.getOrderDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                     order.getTotalPrice(),
+                    order.getPaymentMethod(),
+                    addressService.getAddressForOrder(order.getAddressId()),
                     orderItemService.orderItems(order)
             );
             orderDtolist.add(orderDto);
@@ -72,6 +78,8 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setOrderDate(new Date());
         newOrder.setUser(user);
         newOrder.setTotalPrice(order.getTotalPrice());
+        newOrder.setAddressId(order.getAddressId());
+        newOrder.setPaymentMethod(order.getPaymentMethod());
         orderRepository.save(newOrder);
 
         System.err.println(

@@ -27,6 +27,12 @@ public class Order {
     @Column(name = "total_price")
     private double totalPrice;
 
+    @Column(name = "payment_method")
+    private String paymentMethod;
+
+    @Column(name = "address_id")
+    private Long addressId;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "userId")

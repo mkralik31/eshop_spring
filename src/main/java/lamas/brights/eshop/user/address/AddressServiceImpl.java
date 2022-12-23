@@ -1,5 +1,6 @@
 package lamas.brights.eshop.user.address;
 
+import lamas.brights.eshop.order.Order;
 import lamas.brights.eshop.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,5 +43,10 @@ public class AddressServiceImpl implements AddressService{
                         "Postal code: " + newAddress.getPostCode() + "\n" +
                         "UserId: " + newAddress.getUser().getUserId()
         );
+    }
+
+    @Override
+    public Address getAddressForOrder(Long addressId) {
+        return addressRepository.findAddressById(addressId);
     }
 }

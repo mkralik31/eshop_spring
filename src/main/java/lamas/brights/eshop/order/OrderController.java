@@ -53,6 +53,7 @@ public class OrderController {
             authenticationService.authenticate(token);
             User user = authenticationService.getUser(token);
             // place the order
+            System.err.println(order.getAddressId());
             orderService.createOrder(user, order);
             return new ResponseEntity<>("Success", HttpStatus.CREATED);
         }
