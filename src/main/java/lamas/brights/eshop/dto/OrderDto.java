@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -15,13 +15,13 @@ public class OrderDto {
 
     private Long orderId;
 
-    private Date orderDate;
+    private LocalDate orderDate;
 
     private double totalPrice;
 
     private List<OrderItem> orderItemList;
 
-    public OrderDto(Long orderId, Date orderDate, double totalPrice, List<OrderItem> orderItemList) {
+    public OrderDto(Long orderId, LocalDate orderDate, double totalPrice, List<OrderItem> orderItemList) {
         this.orderId = orderId;
         this.orderDate = orderDate;
         this.totalPrice = totalPrice;

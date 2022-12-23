@@ -12,6 +12,7 @@ import lamas.brights.eshop.orderitem.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
             System.err.println(order);
             OrderDto orderDto = new OrderDto(
                     order.getOrderId(),
-                    order.getOrderDate(),
+                    order.getOrderDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                     order.getTotalPrice(),
                     orderItemService.orderItems(order)
             );

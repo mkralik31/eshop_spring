@@ -3,7 +3,6 @@ package lamas.brights.eshop.order;
 
 import lamas.brights.eshop.authorization.AuthenticationService;
 import lamas.brights.eshop.dto.OrderDto;
-import lamas.brights.eshop.dto.OrderItemDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
